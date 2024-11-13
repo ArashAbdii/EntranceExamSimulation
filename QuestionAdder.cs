@@ -6,7 +6,7 @@ namespace Questioning;
 public class QuestionAdder
 {
     
-    public string AddQues(string Questiontxt, string Answer1, string Answer2, string Answer3, string Answer4, int CorrectAnsr)
+    public static string AddQues(string Questiontxt, string Answer1, string Answer2, string Answer3, string Answer4, int CorrectAnsr)
     {
         string messagetxt = "";
         try

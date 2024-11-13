@@ -1,8 +1,14 @@
-﻿namespace EntranceExamSimulation;
+﻿using Questioning;
 
-internal class Program{
-    static void Main(string[] args)
-    {
+using EntranceExamSimulation.Models;
+using EntranceExamSimulation.Data;
 
+namespace EntranceExamSimulation
+{
+    internal class Program{
+        static void Main(string[] args)
+        {
+
+        }
     }
 }

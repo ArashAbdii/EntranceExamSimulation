@@ -3,6 +3,7 @@ using EntranceExamSimulation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntranceExamSimulation.Migrations
 {
     [DbContext(typeof(EntranceExamContext))]
-    partial class EntranceExamContextModelSnapshot : ModelSnapshot
+    [Migration("20241113071125_userModel")]
+    partial class userModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,47 +58,6 @@ namespace EntranceExamSimulation.Migrations
                     b.HasKey("Question_id");
 
                     b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("EntranceExamSimulation.Models.Student", b =>
-                {
-                    b.Property<int>("User_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("User_id"));
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("User_id");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("EntranceExamSimulation.Models.Teacher", b =>
-                {
-                    b.Property<int>("User_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("User_id"));
-
-                    b.Property<string>("Course_category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isTeacher")
-                        .HasColumnType("bit");
-
-                    b.HasKey("User_id");
-
-                    b.ToTable("Teachers");
                 });
 #pragma warning restore 612, 618
         }
