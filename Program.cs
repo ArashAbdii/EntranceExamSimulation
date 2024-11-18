@@ -1,6 +1,4 @@
-﻿using Questioning;
-
-using EntranceExamSimulation.Models;
+﻿using EntranceExamSimulation.Models;
 using EntranceExamSimulation.Data;
 using System.Runtime.InteropServices;
 using PersianConsole;
@@ -45,9 +43,77 @@ namespace EntranceExamSimulation
             return string.Join(" ", splitedText);
         }
 
-        static void Main(string[] args)
+        private static async Task<string> Examiner(int timeout)
         {
+            ConvertConsole.Enable();
 
+            EntranceExamContext context = new EntranceExamContext();
+
+            string ScoreMessage = null;
+            int score = 0;
+
+
+            Task Examin = Task.Run(() =>
+            {
+
+                var Questions = context.Questions;
+
+
+                foreach (var Quest in Questions)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine(ConvertConsole.ConvertString(ReverseLatinWord(Quest.Question.ToString())));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine(1 + "-" + ReverseLatinWord(ConvertConsole.ConvertString(Quest.Answer1.ToString())));
+                    Console.WriteLine(2 + "-" + ReverseLatinWord(ConvertConsole.ConvertString(Quest.Answer2.ToString())));
+                    Console.WriteLine(3 + "-" + ReverseLatinWord(ConvertConsole.ConvertString(Quest.Answer3.ToString())));
+                    Console.WriteLine(4 + "-" + ReverseLatinWord(ConvertConsole.ConvertString(Quest.Answer4.ToString())));
+                    Console.WriteLine(5 + "-" + ConvertConsole.ConvertString("رد کردن"));
+
+                    int userAnswer = int.Parse(Console.ReadLine());
+
+                    if (userAnswer == Quest.CorrectAnswer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(Reverse_text("جواب شما درست است ."));
+                        score++;
+                    }
+                    else if (userAnswer == 5)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Kept");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(Reverse_text($"پاسخ شما نادرست است . پاسخ درست گزینه {Quest.CorrectAnswer.ToString()} می باشد."));
+                    }
+                }
+
+                ScoreMessage = $"Your Score is {score}";
+                
+            });
+
+            Task DelayTime = Task.Delay(timeout);
+
+            await Task.WhenAny(Examin ,DelayTime);
+
+            if (!Examin.IsCompleted) {
+                ScoreMessage = ConvertConsole.ConvertString($"زمان آزمون شما به پایان رسید نمره شما : {score} است از {context.Questions.Count()}");
+            }
+
+            return ScoreMessage;
+
+
+        }
+
+
+        static async Task Main(string[] args)
+        {
+            string examResult = await Examiner(10000);
+
+            if (!string.IsNullOrEmpty(examResult))
+                Console.WriteLine(examResult);
 
             Console.ReadKey();
         }
