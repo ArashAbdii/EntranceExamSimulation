@@ -43,7 +43,7 @@ namespace EntranceExamSimulation
             return string.Join(" ", splitedText);
         }
 
-        private static async Task<string> Examiner(int timeout)
+        private static async Task<string> ExaminerAsync(int timeout)
         {
             ConvertConsole.Enable();
 
@@ -51,12 +51,14 @@ namespace EntranceExamSimulation
 
             string ScoreMessage = null;
             int score = 0;
+            var isTimeFninsih = false;
 
 
             Task Examin = Task.Run(() =>
             {
 
                 var Questions = context.Questions;
+
 
 
                 foreach (var Quest in Questions)
@@ -88,6 +90,11 @@ namespace EntranceExamSimulation
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(Reverse_text($"پاسخ شما نادرست است . پاسخ درست گزینه {Quest.CorrectAnswer.ToString()} می باشد."));
                     }
+
+                    if(isTimeFninsih)
+                    {
+                        break;
+                    }
                 }
 
                 ScoreMessage = $"Your Score is {score}";
@@ -100,6 +107,7 @@ namespace EntranceExamSimulation
 
             if (!Examin.IsCompleted) {
                 ScoreMessage = ConvertConsole.ConvertString($"زمان آزمون شما به پایان رسید نمره شما : {score} است از {context.Questions.Count()}");
+                isTimeFninsih = true;
             }
 
             return ScoreMessage;
@@ -110,7 +118,7 @@ namespace EntranceExamSimulation
 
         static async Task Main(string[] args)
         {
-            string examResult = await Examiner(10000);
+            string examResult = await ExaminerAsync(10000);
 
             if (!string.IsNullOrEmpty(examResult))
                 Console.WriteLine(examResult);
